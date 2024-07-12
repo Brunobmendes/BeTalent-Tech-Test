@@ -8,6 +8,7 @@
 */
 
 const UsersController = () => import('#controllers/users_controller')
+const SessionController = () => import('#controllers/session_controller')
 import router from '@adonisjs/core/services/router'
 
 router.get('/', async () => {
@@ -16,4 +17,5 @@ router.get('/', async () => {
   }
 })
 
-router.get('/user', [UsersController, 'store'])
+router.post('/user', [UsersController, 'store'])
+router.post('/session', [SessionController, 'Login'])
