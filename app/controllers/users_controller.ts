@@ -8,8 +8,6 @@ export default class UsersController {
       ...request.body(),
       password: await hash.make(request.body().password),
     })
-
-    auth.authenticate()
     response.status(200)
     return {
       message: 'user successfully created',
@@ -18,5 +16,24 @@ export default class UsersController {
         email: user.email,
       },
     }
+  }
+
+  async show({ response, auth }: HttpContext) {
+    await auth.authenticate()
+    response.status(200)
+    const user = auth.getUserOrFail() as any
+    return {
+      ...user.$original,
+      password: null,
+    }
+  }
+
+  async update({ request, auth }: HttpContext) {
+    await auth.authenticate()
+    const user = (await auth.getUserOrFail()) as any
+    const updatedUser = await User.query()
+      .where('id', user.$original.id)
+      .update({ ...request.body() })
+    return updatedUser
   }
 }

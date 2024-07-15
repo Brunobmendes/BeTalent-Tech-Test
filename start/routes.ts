@@ -18,4 +18,7 @@ router.get('/', async () => {
 })
 
 router.post('/user', [UsersController, 'store'])
-router.post('/session', [SessionController, 'Login'])
+router.get('/user', [UsersController, 'show'])
+router.patch('/user', [UsersController, 'update'])
+
+router.post('/login', [SessionController, 'login'])
