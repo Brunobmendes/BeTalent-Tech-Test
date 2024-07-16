@@ -1,7 +1,6 @@
-import Address from '#models/address'
 import Costumer from '#models/costumer'
-import Phone from '#models/phone'
-import { createCostumerValidator } from '#validators/costumer'
+
+import { createCostumerValidator, updateCostumerValidator } from '#validators/costumer'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
@@ -61,30 +60,15 @@ export default class CostumersController {
   }
 
   async update({ params, request, response }: HttpContext) {
-    const trx = await db.transaction()
     try {
-      const { costumer, phone, address } = request.only(['costumer', 'phone', 'address'])
+      const data = await request.validateUsing(updateCostumerValidator)
+
       const updatedCostumer = await Costumer.findOrFail(params.id)
-      updatedCostumer.merge(costumer)
-      await updatedCostumer.useTransaction(trx).save()
-
-      const updatedPhone = await Phone.findOrFail(phone.id)
-      updatedCostumer.merge(phone)
-      await updatedCostumer.useTransaction(trx).save()
-
-      const updatedAddress = await Address.findOrFail(address.id)
-      updatedAddress.merge(address)
-      await updatedAddress.useTransaction(trx).save()
-      await trx.commit()
-      return response.json({
-        updatedCostumer,
-        updatedPhone,
-        updatedAddress,
-      })
+      updatedCostumer.merge({ ...data }).save()
+      return response.json(updatedCostumer)
     } catch (error) {
-      await trx.rollback()
       return response.badRequest({
-        message: 'Error creating user, profile, and address',
+        message: 'Error updating user, profile, and address',
         error: error.message,
       })
     }

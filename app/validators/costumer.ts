@@ -16,3 +16,11 @@ export const createCostumerValidator = vine.compile(
     }),
   })
 )
+
+export const updateCostumerValidator = vine.compile(
+  vine.object({
+    fullname: vine.string().optional(),
+    birth: vine.date().optional(),
+    cpf: vine.string().optional(),
+  })
+)

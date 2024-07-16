@@ -28,7 +28,7 @@ router
     router.post('/costumer', [CostumersController, 'store'])
     router.get('/costumer', [CostumersController, 'index'])
     router.get('/costumer/:id', [CostumersController, 'show'])
-    router.put('/costumer/:id', [CostumersController, 'update'])
+    router.patch('/costumer/:id', [CostumersController, 'update'])
     router.delete('costumer/:id', [CostumersController, 'destroy'])
   })
   .use(middleware.auth())
