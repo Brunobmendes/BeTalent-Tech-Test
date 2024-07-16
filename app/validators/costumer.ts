@@ -7,11 +7,11 @@ export const createCostumerValidator = vine.compile(
     cpf: vine.string(),
     phone: vine.string(),
     address: vine.object({
-      streetAddress: vine.string(),
-      addressLine2: vine.string().optional(),
+      street_address: vine.string(),
+      address_line_2: vine.string().optional(),
       city: vine.string(),
       state: vine.string(),
-      postalCode: vine.string(),
+      postal_code: vine.string(),
       country: vine.string(),
     }),
   })

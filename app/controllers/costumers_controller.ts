@@ -35,17 +35,15 @@ export default class CostumersController {
         updated_at: Date.now(),
       })
 
-      const createdAddress = await trx.insertQuery().table('addresses').insert({
-        street_address: body.address.streetAddress,
-        address_line_2: body.address.addressLine2,
-        city: body.address.city,
-        state: body.address.state,
-        postal_code: body.address.postalCode,
-        country: body.address.country,
-        costumer_id: createdCostumer.id,
-        created_at: Date.now(),
-        updated_at: Date.now(),
-      })
+      const createdAddress = await trx
+        .insertQuery()
+        .table('addresses')
+        .insert({
+          ...body.address,
+          costumer_id: createdCostumer.id,
+          created_at: Date.now(),
+          updated_at: Date.now(),
+        })
 
       await trx.commit()
       return response.json({
