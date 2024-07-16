@@ -1,6 +1,7 @@
 import Address from '#models/address'
 import Costumer from '#models/costumer'
 import Phone from '#models/phone'
+import { createCostumerValidator } from '#validators/costumer'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
@@ -12,19 +13,40 @@ export default class CostumersController {
 
   async show({ params, response }: HttpContext) {
     const costumer = await Costumer.query()
-      .leftJoin('addresses', 'costumers.id', 'addresses.costumer_id')
-      .leftJoin('phones', 'costumers.id', 'phones.costumer_id')
-      .where('costumer.id', params.id)
+      .where('costumers.id', params.id)
+      .preload('Addresses')
+      .preload('Phones')
     return response.json(costumer)
   }
 
   async store({ request, response }: HttpContext) {
     const trx = await db.transaction()
     try {
-      const { costumer, phone, address } = request.only(['costumer', 'phone', 'address'])
-      const createdCostumer = await Costumer.create(costumer, { client: trx })
-      const createdPhone = await trx.insertQuery().table('phones').insert(phone)
-      const createdAddress = await trx.insertQuery().table('addresses').insert(address)
+      const body = await request.validateUsing(createCostumerValidator)
+
+      const createdCostumer = await Costumer.create(
+        { fullname: body.fullname, birth: new Date(body.birth), cpf: body.cpf },
+        { client: trx }
+      )
+      const createdPhone = await trx.insertQuery().table('phones').insert({
+        phone: body.phone,
+        costumer_id: createdCostumer.id,
+        created_at: Date.now(),
+        updated_at: Date.now(),
+      })
+
+      const createdAddress = await trx.insertQuery().table('addresses').insert({
+        street_address: body.address.streetAddress,
+        address_line_2: body.address.addressLine2,
+        city: body.address.city,
+        state: body.address.state,
+        postal_code: body.address.postalCode,
+        country: body.address.country,
+        costumer_id: createdCostumer.id,
+        created_at: Date.now(),
+        updated_at: Date.now(),
+      })
+
       await trx.commit()
       return response.json({
         createdCostumer,

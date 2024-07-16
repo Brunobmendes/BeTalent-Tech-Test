@@ -15,9 +15,9 @@ export default class Costumer extends BaseModel {
   declare cpf: string
 
   @hasMany(() => Phone)
-  declare phones: HasMany<typeof Phone>
+  declare Phones: HasMany<typeof Phone>
   @hasMany(() => Address)
-  declare Addres: HasMany<typeof Address>
+  declare Addresses: HasMany<typeof Address>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
