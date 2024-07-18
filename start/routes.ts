@@ -1,16 +1,8 @@
-/*
-|--------------------------------------------------------------------------
-| Routes file
-|--------------------------------------------------------------------------
-|
-| The routes file is used for defining the HTTP routes.
-|
-*/
-
 const UsersController = () => import('#controllers/users_controller')
 const SessionController = () => import('#controllers/session_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const ProductsController = () => import('#controllers/products_controller')
 const CostumersController = () => import('#controllers/costumers_controller')
 
 router.get('/', async () => {
@@ -30,6 +22,12 @@ router
     router.get('/costumer/:id', [CostumersController, 'show'])
     router.patch('/costumer/:id', [CostumersController, 'update'])
     router.delete('costumer/:id', [CostumersController, 'destroy'])
+
+    router.post('/product', [ProductsController, 'store'])
+    router.get('/product', [ProductsController, 'index'])
+    router.get('/product/:id', [ProductsController, 'show'])
+    router.patch('/product/:id', [ProductsController, 'update'])
+    router.delete('product/:id', [ProductsController, 'destroy'])
   })
   .use(middleware.auth())
 
