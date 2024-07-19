@@ -3,6 +3,7 @@ import Costumer from '#models/costumer'
 import { createCostumerValidator, updateCostumerValidator } from '#validators/costumer'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
+import { DateTime } from 'luxon'
 
 export default class CostumersController {
   async index({ response }: HttpContext) {
@@ -15,6 +16,8 @@ export default class CostumersController {
       .where('costumers.id', params.id)
       .preload('Addresses')
       .preload('Phones')
+      .preload('Sales')
+
     return response.json(costumer)
   }
 
@@ -30,8 +33,8 @@ export default class CostumersController {
       const createdPhone = await trx.insertQuery().table('phones').insert({
         phone: body.phone,
         costumer_id: createdCostumer.id,
-        created_at: Date.now(),
-        updated_at: Date.now(),
+        created_at: DateTime.local().toISO(),
+        updated_at: DateTime.local().toISO(),
       })
 
       const createdAddress = await trx
@@ -40,8 +43,8 @@ export default class CostumersController {
         .insert({
           ...body.address,
           costumer_id: createdCostumer.id,
-          created_at: Date.now(),
-          updated_at: Date.now(),
+          created_at: DateTime.local().toISO(),
+          updated_at: DateTime.local().toISO(),
         })
 
       await trx.commit()

@@ -14,7 +14,7 @@ export default class Sale extends BaseModel {
   @column()
   declare productId: number
   @column()
-  declare quantity: string
+  declare quantity: number
   @column()
   declare unitPrice: number
   @column()
