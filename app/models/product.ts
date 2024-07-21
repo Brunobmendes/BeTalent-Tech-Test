@@ -1,6 +1,15 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeDelete, beforeFetch, beforeFind, column } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeDelete,
+  beforeFetch,
+  beforeFind,
+  column,
+  hasMany,
+} from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
+import Sale from './sale.js'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -19,6 +28,9 @@ export default class Product extends BaseModel {
 
   @column.dateTime({ serializeAs: null })
   declare deletedAt: DateTime
+
+  @hasMany(() => Sale)
+  declare sales: HasMany<typeof Sale>
 
   @beforeDelete()
   static async softDelete(product: Product) {
