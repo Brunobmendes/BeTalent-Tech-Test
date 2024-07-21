@@ -10,11 +10,11 @@ export default class SalesController {
   }
 
   async show({ params, response }: HttpContext) {
-    const sale = await Sale.query().where('id', params.id).preload('costumer').preload('product')
+    const sale = await Sale.query().where('id', params.id).preload('customer').preload('product')
     response.ok(sale)
   }
 
-  async store({ request, response }: HttpContext) {
+  async store({ request }: HttpContext) {
     const data = await request.validateUsing(createSaleValidator)
     const createdSale = Sale.create(data)
     return createdSale
@@ -38,14 +38,13 @@ export default class SalesController {
     response.accepted(data)
   }
 
-  async finish({ params, response }: HttpContext) {
+  async finish({ params }: HttpContext) {
     const sale = await Sale.findOrFail(params.id)
     const finishedSale = await sale
       .merge({
         status: SaleStatus.FINISHED,
       })
       .save()
-    response.ok('FINISHED')
     return finishedSale
   }
 }

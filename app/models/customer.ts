@@ -5,7 +5,7 @@ import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Address from './address.js'
 import Sale from './sale.js'
 
-export default class Costumer extends BaseModel {
+export default class Customer extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()

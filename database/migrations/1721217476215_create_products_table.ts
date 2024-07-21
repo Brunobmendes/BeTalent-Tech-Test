@@ -9,7 +9,6 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.string('description')
       table.float('price')
-      table.float('quantity').defaultTo(0)
       table.timestamp('created_at')
       table.timestamp('updated_at')
       table.dateTime('deleted_at').nullable()

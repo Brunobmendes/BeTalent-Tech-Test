@@ -20,8 +20,6 @@ export default class Product extends BaseModel {
   declare name: string
   @column()
   declare price: number
-  @column()
-  declare quantity: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
