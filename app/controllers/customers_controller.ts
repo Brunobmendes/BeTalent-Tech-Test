@@ -11,12 +11,17 @@ export default class CustomersController {
     return response.json(customers)
   }
 
-  async show({ params, response }: HttpContext) {
+  async show({ params, request, response }: HttpContext) {
+    const { month, year } = request.qs()
     const customer = await Customer.query()
       .where('customers.id', params.id)
       .preload('Addresses')
       .preload('Phones')
-      .preload('Sales')
+      .preload('Sales', (salesQuery) => {
+        salesQuery.orderBy('created_at', 'desc')
+        month ? salesQuery.whereRaw('extract(month from created_at) = ?', [month]) : ''
+        year ? salesQuery.whereRaw('extract(year from created_at) = ?', [year]) : ''
+      })
 
     return response.json(customer)
   }

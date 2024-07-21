@@ -190,5 +190,8 @@ _com exceção do endpoint `PATCH /sale/{id}/finish` que não pede nenhum body, 
 ### GET E GET{ID}
 ja os endpoints `GET` sem um id podem ser utilizados para se ter as informações básicas do que esta armazenado, e adicionando o {id} na frente é possível ter as informações detalhadas de cada dado.
 
+`GET /customer/{id}?month={monthNumber}&year={yearNumber}`
+nesta rota temos a query opcional de month e year que servem para filtrar as vendas do cliente
+
 ### DELETE
 estes endpoints são utilizados para deletar dados do banco, onde em alguns dados é feito um soft delete para que não se perca completamente os dados das informações
