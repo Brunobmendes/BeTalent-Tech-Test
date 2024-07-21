@@ -1,38 +1,38 @@
-import Costumer from '#models/costumer'
+import Customer from '#models/customer'
 
-import { createCostumerValidator, updateCostumerValidator } from '#validators/costumer'
+import { createCustomerValidator, updateCustomerValidator } from '#validators/customer'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 
-export default class CostumersController {
+export default class CustomersController {
   async index({ response }: HttpContext) {
-    const costumers = await Costumer.query().orderBy('id', 'asc')
-    return response.json(costumers)
+    const customers = await Customer.query().orderBy('id', 'asc')
+    return response.json(customers)
   }
 
   async show({ params, response }: HttpContext) {
-    const costumer = await Costumer.query()
-      .where('costumers.id', params.id)
+    const customer = await Customer.query()
+      .where('customers.id', params.id)
       .preload('Addresses')
       .preload('Phones')
       .preload('Sales')
 
-    return response.json(costumer)
+    return response.json(customer)
   }
 
   async store({ request, response }: HttpContext) {
     const trx = await db.transaction()
     try {
-      const body = await request.validateUsing(createCostumerValidator)
+      const body = await request.validateUsing(createCustomerValidator)
 
-      const createdCostumer = await Costumer.create(
+      const createdCustomer = await Customer.create(
         { fullname: body.fullname, birth: new Date(body.birth), cpf: body.cpf },
         { client: trx }
       )
       const createdPhone = await trx.insertQuery().table('phones').insert({
         phone: body.phone,
-        costumer_id: createdCostumer.id,
+        customer_id: createdCustomer.id,
         created_at: DateTime.local().toISO(),
         updated_at: DateTime.local().toISO(),
       })
@@ -42,14 +42,14 @@ export default class CostumersController {
         .table('addresses')
         .insert({
           ...body.address,
-          costumer_id: createdCostumer.id,
+          customer_id: createdCustomer.id,
           created_at: DateTime.local().toISO(),
           updated_at: DateTime.local().toISO(),
         })
 
       await trx.commit()
       return response.json({
-        createdCostumer,
+        createdCustomer,
         createdPhone,
         createdAddress,
       })
@@ -64,11 +64,11 @@ export default class CostumersController {
 
   async update({ params, request, response }: HttpContext) {
     try {
-      const data = await request.validateUsing(updateCostumerValidator)
+      const data = await request.validateUsing(updateCustomerValidator)
 
-      const updatedCostumer = await Costumer.findOrFail(params.id)
-      updatedCostumer.merge({ ...data }).save()
-      return response.json(updatedCostumer)
+      const updatedCustomer = await Customer.findOrFail(params.id)
+      updatedCustomer.merge({ ...data }).save()
+      return response.json(updatedCustomer)
     } catch (error) {
       return response.badRequest({
         message: 'Error updating user, profile, and address',
@@ -78,7 +78,7 @@ export default class CostumersController {
   }
 
   async destroy({ params, response }: HttpContext) {
-    const deletedCostumer = await Costumer.query().where('id', params.id).delete()
-    response.json(deletedCostumer)
+    const deletedCustomer = await Customer.query().where('id', params.id).delete()
+    response.json(deletedCustomer)
   }
 }

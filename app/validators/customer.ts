@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
 
-export const createCostumerValidator = vine.compile(
+export const createCustomerValidator = vine.compile(
   vine.object({
     fullname: vine.string(),
     birth: vine.date(),
@@ -17,7 +17,7 @@ export const createCostumerValidator = vine.compile(
   })
 )
 
-export const updateCostumerValidator = vine.compile(
+export const updateCustomerValidator = vine.compile(
   vine.object({
     fullname: vine.string().optional(),
     birth: vine.date().optional(),

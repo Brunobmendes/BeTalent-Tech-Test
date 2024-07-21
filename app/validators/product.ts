@@ -5,7 +5,6 @@ export const createProductValidator = vine.compile(
     name: vine.string(),
     description: vine.string().optional(),
     price: vine.number().optional(),
-    quantity: vine.number().optional(),
   })
 )
 
@@ -14,6 +13,5 @@ export const updateProductValidator = vine.compile(
     name: vine.string().optional(),
     description: vine.string().optional(),
     price: vine.number().optional(),
-    quantity: vine.number().optional(),
   })
 )

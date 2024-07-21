@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, belongsTo, column } from '@adonisjs/lucid/orm'
-import Costumer from './costumer.js'
+import Customer from './customer.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Product from './product.js'
 import { SaleStatus } from './enums/sale_enum.js'
@@ -10,7 +10,7 @@ export default class Sale extends BaseModel {
   declare id: number
 
   @column()
-  declare costumerId: number
+  declare customerId: number
   @column()
   declare productId: number
   @column()
@@ -22,8 +22,8 @@ export default class Sale extends BaseModel {
   @column()
   declare status: SaleStatus
 
-  @belongsTo(() => Costumer)
-  declare costumer: BelongsTo<typeof Costumer>
+  @belongsTo(() => Customer)
+  declare customer: BelongsTo<typeof Customer>
 
   @belongsTo(() => Product)
   declare product: BelongsTo<typeof Product>

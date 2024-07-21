@@ -3,7 +3,7 @@ import vine from '@vinejs/vine'
 
 export const createSaleValidator = vine.compile(
   vine.object({
-    costumerId: vine.number(),
+    customerId: vine.number(),
     productId: vine.number(),
     quantity: vine.number(),
     unitPrice: vine.number(),
@@ -14,7 +14,7 @@ export const createSaleValidator = vine.compile(
 
 export const udpateSaleValidator = vine.compile(
   vine.object({
-    costumerId: vine.number().optional(),
+    customerId: vine.number().optional(),
     productId: vine.number().optional(),
     quantity: vine.number().optional(),
     unitPrice: vine.number().optional(),
