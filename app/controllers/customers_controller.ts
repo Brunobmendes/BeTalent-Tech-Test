@@ -16,7 +16,9 @@ export default class CustomersController {
       .where('customers.id', params.id)
       .preload('Addresses')
       .preload('Phones')
-      .preload('Sales')
+      .preload('Sales', (salesQuery) => {
+        salesQuery.orderBy('created_at', 'desc')
+      })
 
     return response.json(customer)
   }
