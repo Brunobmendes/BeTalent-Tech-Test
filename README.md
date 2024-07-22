@@ -73,7 +73,8 @@ npm run dev
   - `POST /login`
   - `GET /user` 🔑
   - `PATCH /user` 🔑
- - 🔑 **Clientes:**
+
+- 🔑 **Clientes:**
   - `GET /customer`
   - `GET /customer/{id}`
   - `POST /customer`
